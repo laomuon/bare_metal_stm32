@@ -19,35 +19,35 @@ SECTIONS
     {
         . = ALIGN(4);
         *(.text)
-        . = ALIGN(4)
+        . = ALIGN(4);
         _etext = .;
     } >FLASH
 
     /* Constant (read-only) data */
     .rodata :
     {
-        . = ALIGN(4)
+        . = ALIGN(4);
         *(.rodata)
-        . = ALIGN(4)
+        . = ALIGN(4);
     } >FLASH
 
     /* Initialized variable data that will be copied to SRAM during setup */
     .data :
     {
-        . = ALIGN(4)
+        . = ALIGN(4);
         _sdata = .;
         *(.data)
-        . = ALIGN(4)
+        . = ALIGN(4);
         _edata = .;
     } >SRAM AT> FLASH
 
     /* Uninitialized variable data, zero-filled during setup */
     .bss :
     {
-        . = ALIGN(4)
+        . = ALIGN(4);
         _sbss = .;
         *(.bss)
-        . = ALIGN(4)
+        . = ALIGN(4);
         _ebss = .;
 
     } >SRAM
