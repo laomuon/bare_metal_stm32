@@ -19,17 +19,18 @@ SECTIONS
     {
         . = ALIGN(4);
         *(.text)
+        *(.text.*)
+        *(.rodata)
+        *(.rodata.*)
+        KEEP(*(.init))
+        KEEP(*(.fini))
+        *(.eh_frame)
+        *(.ARM.exidx)
         . = ALIGN(4);
         _etext = .;
     } >FLASH
 
-    /* Constant (read-only) data */
-    .rodata :
-    {
-        . = ALIGN(4);
-        *(.rodata)
-        . = ALIGN(4);
-    } >FLASH
+    _sidata = LOADADDR(.data);
 
     /* Initialized variable data that will be copied to SRAM during setup */
     .data :
@@ -37,6 +38,9 @@ SECTIONS
         . = ALIGN(4);
         _sdata = .;
         *(.data)
+        *(.data.*)
+        KEEP(*(.init_array))
+        KEEP(*(.fini_array))
         . = ALIGN(4);
         _edata = .;
     } >SRAM AT> FLASH
@@ -46,9 +50,12 @@ SECTIONS
     {
         . = ALIGN(4);
         _sbss = .;
+        __bss_start__ = _sbss;
         *(.bss)
+        *(.bss.*)
         . = ALIGN(4);
         _ebss = .;
+        __bss_end__ = _ebss;
 
     } >SRAM
 

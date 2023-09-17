@@ -10,6 +10,7 @@
 #define ISR_VECTOR_SIZE_WORDS 118
 
 void main(void);
+void __libc_init_array();
 
 void reset_handler(void);
 /* default handler function for un-implemented handler */
@@ -274,5 +275,6 @@ void reset_handler(void)
         bss[i] = 0;
     }
 
+    __libc_init_array();
     main();
 }
