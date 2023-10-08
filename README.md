@@ -17,6 +17,7 @@ The end goal of this project is to develop my own driver for a module SSH1106 OL
 - [stlink](https://github.com/stlink-org/stlink)
 - [Bear](https://github.com/rizsotto/Bear) to generate the `compile_commands.json` for `clangd`
 - make
+- [minicom](https://help.ubuntu.com/community/Minicom) to view the message sent by the `USART`
 
 ## Library
 - Newlib-nano
