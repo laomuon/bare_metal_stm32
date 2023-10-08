@@ -1,7 +1,7 @@
 #include "usart.h"
 #include "stm32g4xx.h"
 
-int init_lpuart1(void)
+void init_lpuart1(void)
 {
     /* Init the pinpouts PA2/PA3 
         - Start the clock for AHB2 bus
@@ -19,21 +19,14 @@ int init_lpuart1(void)
     GPIOA->AFR[0] |= (12 << GPIO_AFRL_AFSEL2_Pos | 12 << GPIO_AFRL_AFSEL3_Pos);
 
     /* Init the lpuart */
+    RCC->CFGR &= ~RCC_CFGR_PPRE1_Msk;
+    dummy = RCC->CFGR;
+    dummy = RCC->CFGR;
     RCC->APB1ENR2 |= (1<<RCC_APB1ENR2_LPUART1EN_Pos);
     dummy = RCC->APB1ENR2;
     dummy = RCC->APB1ENR2;
-    // if (!(RCC->CR & RCC_CR_HSION_Msk)) return 0;
-    // PWR->CR1 |= PWR_CR1_DBP_Msk;
-    // dummy = PWR->CR1;
-    // dummy = PWR->CR1;
-    // RCC->BDCR |= RCC_BDCR_LSEON;
-    // dummy = RCC->BDCR;
-    // dummy = RCC->BDCR;
-    // RCC->CCIPR |= 1 << RCC_CCIPR_LPUART1SEL_Pos;
-    // dummy = RCC->CCIPR;
-    // dummy = RCC->CCIPR;
     LPUART1->CR1 &= ~(USART_CR1_UE);
-    LPUART1->BRR = 35556;
+    LPUART1->BRR = 0x682AA;
     LPUART1->PRESC &= ~(0xF);
     LPUART1->CR1 |= USART_CR1_UE;
     LPUART1->CR1 |= USART_CR1_TE | USART_CR1_RE;

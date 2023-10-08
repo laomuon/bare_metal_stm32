@@ -1,0 +1,42 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "--specs=nano.specs",
+      "-g3",
+      "-Wall",
+      "-I",
+      "CMSIS/CMSIS/Core/Include/",
+      "-I",
+      "CMSIS/Device/ST/STM32G4/Include/",
+      "-D",
+      "STM32G474xx",
+      "-c",
+      "main.c"
+    ],
+    "directory": "/home/muon/bare_metal_stm32",
+    "file": "/home/muon/bare_metal_stm32/main.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "--specs=nano.specs",
+      "-g3",
+      "-Wall",
+      "-I",
+      "CMSIS/CMSIS/Core/Include/",
+      "-I",
+      "CMSIS/Device/ST/STM32G4/Include/",
+      "-D",
+      "STM32G474xx",
+      "-c",
+      "syscall.c"
+    ],
+    "directory": "/home/muon/bare_metal_stm32",
+    "file": "/home/muon/bare_metal_stm32/syscall.c"
+  }
+]

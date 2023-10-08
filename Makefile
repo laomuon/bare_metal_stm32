@@ -32,7 +32,7 @@ blink.bin: blink.elf
 	$(CONVERT_PROGRAM) -O binary blink.elf blink.bin
 
 flash: blink.bin
-	$(FLASH_PROGRAM) --reset write blink.bin 0x8000000
+	$(FLASH_PROGRAM) --reset --connect-under-reset write blink.bin 0x8000000
 
 .PHONY: clean
 clean:
