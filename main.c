@@ -94,7 +94,7 @@ int main(void)
         /* printf need a \n character at the end as stdout is buffered
         https://community.st.com/t5/stm32cubeide-mcus/printf-not-working-write-never-gets-called/td-p/276659
         */
-        printf("Test now asdfadsgsj;gas;ofcoxokJIQ JWCFXQ\r\n");
+        printf("[%.3f] Hello World\r\n", (float)tick/1000.0f);
         delay_ms(1000);
 
     }

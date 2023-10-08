@@ -7,11 +7,12 @@ LINKER_FILE=linker_script.ld
 LDFLAGS=-T $(LINKER_FILE)
 CONVERT_PROGRAM=arm-none-eabi-objcopy
 FLASH_PROGRAM=st-flash
+PRINT_FLOAT= -u _printf_float
 
 all: blink.bin
 
 blink.elf: startup.o main.o system_stm32g4xx.o syscall.o usart.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $^ -o blink.elf
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(PRINT_FLOAT) $^ -o blink.elf
 
 main.o: main.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) main.c -c
