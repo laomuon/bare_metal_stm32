@@ -11,7 +11,7 @@ PRINT_FLOAT= -u _printf_float
 
 all: blink.bin
 
-blink.elf: startup.o main.o system_stm32g4xx.o syscall.o usart.o
+blink.elf: startup.o main.o system_stm32g4xx.o syscall.o usart.o i2c.o
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(PRINT_FLOAT) $^ -o blink.elf
 
 main.o: main.c
@@ -28,6 +28,9 @@ syscall.o: syscall.c
 
 usart.o: usart.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) usart.c -c
+
+i2c.o: i2c.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) i2c.c -c
 
 blink.bin: blink.elf
 	$(CONVERT_PROGRAM) -O binary blink.elf blink.bin

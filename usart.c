@@ -26,7 +26,7 @@ void init_lpuart1(void)
     dummy = RCC->APB1ENR2;
     dummy = RCC->APB1ENR2;
     LPUART1->CR1 &= ~(USART_CR1_UE);
-    LPUART1->BRR = 0x682AA;
+    LPUART1->BRR = 0x3640E;
     LPUART1->PRESC &= ~(0xF);
     LPUART1->CR1 |= USART_CR1_UE;
     LPUART1->CR1 |= USART_CR1_TE | USART_CR1_RE;

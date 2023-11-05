@@ -1,6 +1,8 @@
 #include <stdint.h>
+#include "stm32g474xx.h"
 #include "stm32g4xx.h"
 #include "usart.h"
+#include "i2c.h"
 
 #define LED_PIN 5
 
@@ -33,7 +35,7 @@ void init_clock(void)
     RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLN_Msk;
     RCC->PLLCFGR |= 25 << RCC_PLLCFGR_PLLN_Pos;  // N=25
     RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLR_Msk;
-    RCC->PLLCFGR |= 4 << RCC_PLLCFGR_PLLR_Pos;  // R=4
+    RCC->PLLCFGR |= 1 << RCC_PLLCFGR_PLLR_Pos;  // R=4
     RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLSRC_Msk;
     RCC->PLLCFGR |= RCC_PLLCFGR_PLLSRC_HSI_Msk; // Set PLL input as HSI16
 
@@ -77,10 +79,7 @@ int main(void)
 {
     init_pwr();
     init_clock();
-    SysTick_Config(100000);
-    __enable_irq();
     RCC->AHB2ENR |= (1<<RCC_AHB2ENR_GPIOAEN_Pos);
-
     volatile uint32_t dummy;
     dummy = RCC->AHB2ENR;
     dummy = RCC->AHB2ENR;
@@ -88,6 +87,14 @@ int main(void)
     GPIOA->MODER &= ~(3<<GPIO_MODER_MODE5_Pos);
     GPIOA->MODER |= (1<<GPIO_MODER_MODE5_Pos);
     init_lpuart1();
+    SysTick_Config(100000);
+    __enable_irq();
+    init_i2c1();
+    i2c1_transfert(0b00000000);
+    // i2c1_transfert(0b10101110);
+    // i2c1_transfert(0b10101111);
+    // i2c1_transfert(0b10100101);
+
     while(1)
     {
         GPIOA->ODR ^= (1<<LED_PIN);
@@ -95,6 +102,7 @@ int main(void)
         https://community.st.com/t5/stm32cubeide-mcus/printf-not-working-write-never-gets-called/td-p/276659
         */
         printf("[%.3f] Hello World\r\n", (float)tick/1000.0f);
+        printf("ISR: %X \r\n", I2C1->ISR);
         delay_ms(1000);
 
     }
