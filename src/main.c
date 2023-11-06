@@ -91,10 +91,6 @@ int main(void)
     __enable_irq();
     init_i2c1();
     i2c1_transfert(0b00000000);
-    // i2c1_transfert(0b10101110);
-    // i2c1_transfert(0b10101111);
-    // i2c1_transfert(0b10100101);
-
     while(1)
     {
         GPIOA->ODR ^= (1<<LED_PIN);
