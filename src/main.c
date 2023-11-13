@@ -1,10 +1,9 @@
 #include <stdint.h>
-#include "stm32g474xx.h"
-#include "stm32g4xx.h"
 #include "usart.h"
-#include "i2c.h"
+#include "sh1106_128x64.h"
 
 #define LED_PIN 5
+#define OLED_ADDR 0x3C << 1
 
 /* Switch from power Range 2 (Low power) to Range 1 Normal (High Power) */
 void init_pwr(void)
@@ -77,6 +76,7 @@ void delay_ms(uint32_t miliseconds)
 
 int main(void)
 {
+    struct Oled oled = {I2C1, OLED_ADDR};
     init_pwr();
     init_clock();
     RCC->AHB2ENR |= (1<<RCC_AHB2ENR_GPIOAEN_Pos);
@@ -87,10 +87,11 @@ int main(void)
     GPIOA->MODER &= ~(3<<GPIO_MODER_MODE5_Pos);
     GPIOA->MODER |= (1<<GPIO_MODER_MODE5_Pos);
     init_lpuart1();
+    printf("%d\r\n", oled.hi2c->CR1);
+    init_oled(oled);
+    oled_entire_display_control(oled, 1);
     SysTick_Config(100000);
     __enable_irq();
-    init_i2c1();
-    i2c1_transfert(0b00000000);
     while(1)
     {
         GPIOA->ODR ^= (1<<LED_PIN);
@@ -98,7 +99,6 @@ int main(void)
         https://community.st.com/t5/stm32cubeide-mcus/printf-not-working-write-never-gets-called/td-p/276659
         */
         printf("[%.3f] Hello World\r\n", (float)tick/1000.0f);
-        printf("ISR: %X \r\n", I2C1->ISR);
         delay_ms(1000);
 
     }

@@ -1,7 +1,5 @@
 #include "i2c.h"
-#include "stm32g474xx.h"
 
-#define OLED_ADDR 0x3C << 1
 
 void init_pin_i2c1(void)
 {
@@ -42,72 +40,67 @@ void init_pin_i2c1(void)
     //
 }
 
-void init_i2c1(void)
+void init_i2c(I2C_TypeDef *i2c)
 {
     init_pin_i2c1();
-    I2C1->CR1 &= ~I2C_CR1_PE_Msk;
+    i2c->CR1 &= ~I2C_CR1_PE_Msk;
 
     // Disable analog and digital filters
-    I2C1->CR1 &= ~(I2C_CR1_ANFOFF_Msk);
-    I2C1->CR1 &= ~(I2C_CR1_DNF_Msk);
+    i2c->CR1 &= ~(I2C_CR1_ANFOFF_Msk);
+    i2c->CR1 &= ~(I2C_CR1_DNF_Msk);
 
     // Set timings
-    I2C1->TIMINGR &= ~(I2C_TIMINGR_PRESC_Msk);
-    I2C1->TIMINGR &= ~(I2C_TIMINGR_SDADEL_Msk);
-    I2C1->TIMINGR &= ~(I2C_TIMINGR_SCLDEL_Msk);
-    I2C1->TIMINGR &= ~(I2C_TIMINGR_SCLH_Msk);
-    I2C1->TIMINGR &= ~(I2C_TIMINGR_SCLL_Msk);
+    i2c->TIMINGR &= ~(I2C_TIMINGR_PRESC_Msk);
+    i2c->TIMINGR &= ~(I2C_TIMINGR_SDADEL_Msk);
+    i2c->TIMINGR &= ~(I2C_TIMINGR_SCLDEL_Msk);
+    i2c->TIMINGR &= ~(I2C_TIMINGR_SCLH_Msk);
+    i2c->TIMINGR &= ~(I2C_TIMINGR_SCLL_Msk);
 
-    I2C1->TIMINGR |= (1<<I2C_TIMINGR_PRESC_Pos);
-    I2C1->TIMINGR |= 0x9 << I2C_TIMINGR_SCLL_Pos;
-    I2C1->TIMINGR |= 0x3 << I2C_TIMINGR_SCLH_Pos;
-    I2C1->TIMINGR |= 0x2 << I2C_TIMINGR_SDADEL_Pos;
-    I2C1->TIMINGR |= 0x3 << I2C_TIMINGR_SCLDEL_Pos;
+    i2c->TIMINGR |= (1<<I2C_TIMINGR_PRESC_Pos);
+    i2c->TIMINGR |= 0x9 << I2C_TIMINGR_SCLL_Pos;
+    i2c->TIMINGR |= 0x3 << I2C_TIMINGR_SCLH_Pos;
+    i2c->TIMINGR |= 0x2 << I2C_TIMINGR_SDADEL_Pos;
+    i2c->TIMINGR |= 0x3 << I2C_TIMINGR_SCLDEL_Pos;
 
-    // I2C1->TIMINGR = 0x10C0F1FF;
-    I2C1->CR1 &= ~I2C_CR1_NOSTRETCH_Msk;
+    i2c->CR1 &= ~I2C_CR1_NOSTRETCH_Msk;
 
     // Disable DMA
-    I2C1->CR1 &= ~I2C_CR1_RXDMAEN_Msk;
-    I2C1->CR1 &= ~I2C_CR1_TXDMAEN_Msk;
+    i2c->CR1 &= ~I2C_CR1_RXDMAEN_Msk;
+    i2c->CR1 &= ~I2C_CR1_TXDMAEN_Msk;
 
-    I2C1->OAR1 |= I2C_OAR1_OA1EN_Msk;
-    I2C1->OAR1 |= I2C_OAR1_OA1MODE_Msk;
-    I2C1->OAR1 &= ~I2C_OAR1_OA1_Msk;
-    I2C1->OAR1 |= 0x78;
+    i2c->OAR1 |= I2C_OAR1_OA1EN_Msk;
+    i2c->OAR1 |= I2C_OAR1_OA1MODE_Msk;
+    i2c->OAR1 &= ~I2C_OAR1_OA1_Msk;
+    i2c->OAR1 |= 0x78;
 
-    I2C1->CR1 |= I2C_CR1_PE_Msk;
+    i2c->CR1 |= I2C_CR1_PE_Msk;
 }
 
-void start_i2c1(void)
+void start_i2c(I2C_TypeDef *i2c, int addr)
 {
-    I2C1->CR2 &= ~(I2C_CR2_ADD10_Msk);
-    I2C1->CR2 &= ~(I2C_CR2_SADD_Msk);
-    I2C1->CR2 |= OLED_ADDR << I2C_CR2_SADD_Pos;
-    I2C1->CR2 &= ~(I2C_CR2_RD_WRN_Msk);
-    I2C1->CR2 &= ~I2C_CR2_NBYTES_Msk;
-    I2C1->CR2 |= 5 << I2C_CR2_NBYTES_Pos;
-    I2C1->CR2 |= I2C_CR2_AUTOEND_Msk;
-    I2C1->CR2 |= 1 << I2C_CR2_START_Pos;
+    i2c->CR2 &= ~(I2C_CR2_ADD10_Msk);
+    i2c->CR2 &= ~(I2C_CR2_SADD_Msk);
+    i2c->CR2 |= addr << I2C_CR2_SADD_Pos;
+    i2c->CR2 &= ~(I2C_CR2_RD_WRN_Msk);
+    i2c->CR2 &= ~I2C_CR2_NBYTES_Msk;
+    i2c->CR2 |= 5 << I2C_CR2_NBYTES_Pos;
+    i2c->CR2 |= I2C_CR2_AUTOEND_Msk;
+    i2c->CR2 |= 1 << I2C_CR2_START_Pos;
 }
 
-void i2c1_stop_transfert(void)
+void i2c_stop_transfert(I2C_TypeDef *i2c)
 {
-    I2C1->ICR |= I2C_ICR_STOPCF;
-    I2C1->CR2 = 0;
+    i2c->ICR |= I2C_ICR_STOPCF;
+    i2c->CR2 = 0;
 }
 
-void i2c1_transfert(int msg)
+void i2c_transfert(I2C_TypeDef *i2c, int *msg, int len, int addr)
 {
-    start_i2c1();
-    I2C1->TXDR = 0;
-    while (!(I2C1->ISR & I2C_ISR_TXIS_Msk));
-    I2C1->TXDR = 0b10101110;
-    while (!(I2C1->ISR & I2C_ISR_TXIS_Msk));
-    I2C1->TXDR = 0b10101111;
-    while (!(I2C1->ISR & I2C_ISR_TXIS_Msk));
-    I2C1->TXDR = 0b10100101;
-    while (!(I2C1->ISR & I2C_ISR_TXIS_Msk));
-    i2c1_stop_transfert();
-    printf("done\n");
+    start_i2c(i2c, addr);
+    for (int i =0; i < len; i++)
+    {
+        i2c->TXDR = msg[i];
+        while (!(i2c->ISR & I2C_ISR_TXIS_Msk));
+    }
+    i2c_stop_transfert(i2c);
 }
