@@ -76,7 +76,8 @@ void delay_ms(uint32_t miliseconds)
 
 int main(void)
 {
-    struct Oled oled = {I2C1, OLED_ADDR};
+    struct Oled oled = {I2C1, OLED_ADDR, 0};
+    int line_nb = 0;
     init_pwr();
     init_clock();
     RCC->AHB2ENR |= (1<<RCC_AHB2ENR_GPIOAEN_Pos);
@@ -87,18 +88,20 @@ int main(void)
     GPIOA->MODER &= ~(3<<GPIO_MODER_MODE5_Pos);
     GPIOA->MODER |= (1<<GPIO_MODER_MODE5_Pos);
     init_lpuart1();
-    printf("%d\r\n", oled.hi2c->CR1);
     init_oled(oled);
-    oled_entire_display_control(oled, 1);
+    oled_clear_display(oled);
+    oled_entire_display_control(oled, 0);
     SysTick_Config(100000);
     __enable_irq();
     while(1)
     {
         GPIOA->ODR ^= (1<<LED_PIN);
+        oled_draw_line(oled, line_nb);
+        line_nb++;
         /* printf need a \n character at the end as stdout is buffered
         https://community.st.com/t5/stm32cubeide-mcus/printf-not-working-write-never-gets-called/td-p/276659
         */
-        printf("[%.3f] Hello World\r\n", (float)tick/1000.0f);
+        // printf("[%.3f] Hello World\r\n", (float)tick/1000.0f);
         delay_ms(1000);
 
     }
