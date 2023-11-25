@@ -1,4 +1,5 @@
 #include "i2c.h"
+#include "font.h"
 
 #define START_COMMAND_MODE 0
 #define START_DATA_MODE 0b01000000
@@ -27,3 +28,5 @@ void oled_send_cmds(struct Oled oled, int lenght, int *commands);
 void oled_entire_display_control(struct Oled oled, int is_on);
 void oled_draw_line(struct Oled oled, int line_nb);
 void oled_clear_display(struct Oled oled);
+void oled_draw_char(struct Oled oled, char ch, int line, int col);
+void oled_draw_string(struct Oled oled, char* chs, int line, int col);

@@ -62,7 +62,6 @@ void oled_draw_line(struct Oled oled, int line_nb)
     {
         ram_data[i] = 1 << line_in_page;
     }
-    printf("%d \r\n", first_page_addr);
     cmds[1] = SET_LOW_COL_ADDR_HEADER + 0;
     cmds[2] = SET_HIGH_COL_ADDR_HEADER + 0;
     cmds[3] = SET_PAGE_ADDR_HEADER + first_page_addr;
@@ -71,3 +70,29 @@ void oled_draw_line(struct Oled oled, int line_nb)
     oled_send_cmds(oled, 133, ram_data);
 }
 
+void oled_draw_char(struct Oled oled, char ch, int line, int col)
+{
+    int cmds[4] = {START_COMMAND_MODE};
+    int ram_data[6] = {START_DATA_MODE};
+    for (int i=0; i<5; i++)
+    {
+        ram_data[i+1] = ASCII[ch - 0x20][i];
+    }
+    cmds[1] = SET_LOW_COL_ADDR_HEADER + (col & 0xF);
+    cmds[2] = SET_HIGH_COL_ADDR_HEADER + (col >> 4);
+    cmds[3] = SET_PAGE_ADDR_HEADER + ((int)(line/8) % 8);
+    oled_send_cmds(oled, 4, cmds);
+    oled_send_cmds(oled, 6, ram_data);
+}
+
+void oled_draw_string(struct Oled oled, char* chs, int line, int col)
+{
+    char *tmp = chs;
+    int starting_col = col;
+    while(*tmp != '\0')
+    {
+        oled_draw_char(oled, *tmp, line, starting_col);
+        starting_col+=5;
+        tmp++;
+    }
+}

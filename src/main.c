@@ -93,10 +93,11 @@ int main(void)
     oled_entire_display_control(oled, 0);
     SysTick_Config(100000);
     __enable_irq();
+    oled_draw_string(oled, "Hello World", 40, 40);
     while(1)
     {
         GPIOA->ODR ^= (1<<LED_PIN);
-        oled_draw_line(oled, line_nb);
+        // oled_draw_line(oled, line_nb);
         line_nb++;
         /* printf need a \n character at the end as stdout is buffered
         https://community.st.com/t5/stm32cubeide-mcus/printf-not-working-write-never-gets-called/td-p/276659
