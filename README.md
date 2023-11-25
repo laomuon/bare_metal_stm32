@@ -12,6 +12,9 @@ The end goal of this project is to develop my own driver for a module SSH1106 OL
 - Configure the clock system to be 100MHz
 - Implement a primitive printf with `USART`
 - Implement I2C
+- Add a function to draw a line
+- Add a function to draw a char
+- Add a function to draw a string
 
 ## Tools
 - [ARM GNU toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)

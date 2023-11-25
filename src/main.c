@@ -93,7 +93,7 @@ int main(void)
     oled_entire_display_control(oled, 0);
     SysTick_Config(100000);
     __enable_irq();
-    oled_draw_string(oled, "Hello World", 40, 40);
+    oled_draw_string(oled, "Hello World", 3, 120);
     while(1)
     {
         GPIOA->ODR ^= (1<<LED_PIN);
